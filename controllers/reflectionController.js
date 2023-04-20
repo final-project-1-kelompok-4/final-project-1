@@ -39,6 +39,8 @@ module.exports = class {
             [req.params.id]
         )
         return res.status(200).json({
-            message : `Data with id ${result.rows[0].id} from user ${result.rows[0].UserId} deleted`})
+            message : `Data with id ${result.rows[0].id} from user ${result.rows[0].UserId} deleted`,
+            data : result.rows[0]
+        })
     }
 }
