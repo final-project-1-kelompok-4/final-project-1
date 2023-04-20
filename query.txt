@@ -1,0 +1,30 @@
+//reflection database
+CREATE DATABASE reflection
+
+//user table
+CREATE TABLE IF NOT EXISTS public."user" (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR NOT NULL UNIQUE,
+  password VARCHAR NOT NULL
+);
+
+
+
+//reflection table
+CREATE TABLE IF NOT EXISTS public.reflection (
+  id SERIAL PRIMARY KEY,
+  success VARCHAR NOT NULL,
+  low_point VARCHAR NOT NULL,
+  take_away VARCHAR NOT NULL,
+  "UserId" INTEGER NOT NULL REFERENCES public."user"(id) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  "createdAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION public.update_mytable()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW."updatedAt" = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
