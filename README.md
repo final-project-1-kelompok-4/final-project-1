@@ -29,13 +29,19 @@ CREATE TABLE IF NOT EXISTS public.reflection (
   "updatedAt" TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE OR REPLACE FUNCTION public.update_mytable()
-RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION public.update_reflection_updated_at()
+  RETURNS TRIGGER AS $$
 BEGIN
-    NEW."updatedAt" = CURRENT_TIMESTAMP;
-    RETURN NEW;
+  NEW."updatedAt" = NOW();
+  RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER reflection_updated_at_trigger
+  BEFORE UPDATE ON public.reflection
+  FOR EACH ROW
+  EXECUTE FUNCTION public.update_reflection_updated_at();
+
 ```
 ### npm command
 ```
